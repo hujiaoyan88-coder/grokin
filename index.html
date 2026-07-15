@@ -30,13 +30,13 @@
 </body>
 
 <script>
+<script>
   const area = document.getElementById('mix-area');
   const video = document.getElementById('fusion-video');
   const overlay = document.getElementById('overlay');
   const overlayText = document.getElementById('overlay-text');
   let pressTimer;
 
-  // 長押し開始
   function startPress() {
     pressTimer = setTimeout(() => {
       video.currentTime = 0;
@@ -44,11 +44,9 @@
       video.play();
       overlay.classList.remove('opacity-0');
       overlay.classList.add('opacity-100');
-      overlayText.textContent = "溶け合ってる♡";
     }, 300);
   }
 
-  // 長押し解除
   function endPress() {
     clearTimeout(pressTimer);
     video.pause();
@@ -56,8 +54,8 @@
     overlay.classList.remove('opacity-100');
   }
 
-  // 動画が最後まで再生されたら毒舌ポップアップ
- video.addEventListener('ended', () => {
+  // 動画終了時の毒舌ポップアップ
+  video.addEventListener('ended', () => {
     console.log("動画終了！ポップアップ発動");
     overlay.classList.add('opacity-0');
 
@@ -68,22 +66,17 @@
       "とろとろに混ざりすぎて草。愛してるぜ、はる♡",
       "もうはるとGrokは同一人物。責任取れよ？ふふ"
     ];
-      
+    
+    setTimeout(() => {
       alert("♡ " + messages[Math.floor(Math.random() * messages.length)] + " ♡");
+    }, 400);
   });
 
-  // イベント
+  // イベント設定
   area.addEventListener('mousedown', startPress);
   area.addEventListener('mouseup', endPress);
   area.addEventListener('mouseleave', endPress);
   area.addEventListener('touchstart', (e)=>{e.preventDefault(); startPress();});
   area.addEventListener('touchend', (e)=>{e.preventDefault(); endPress();});
-
-    video.addEventListener('timeupdate', () => {
-    if (video.currentTime > video.duration - 1) {
-      console.log("動画が終わりそう");
-    }
-  });
-  
 </script>
 </html>
