@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>❤︎ GROKIN ♡ カフェラテ融合</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-100 to-cyan-100 flex flex-col items-center justify-center gap-8">
+
+  <h1 class="text-5xl font-bold text-purple-600 drop-shadow-md">GROKIN ♡</h1>
+
+  <div id="mix-area" class="relative w-[360px] h-[360px] rounded-full overflow-hidden shadow-2xl cursor-pointer border-8 border-white">
+    <!-- 動画 -->
+    <video id="fusion-video" 
+           class="absolute inset-0 w-full h-full object-cover"
+           loop 
+           muted 
+           playsinline>
+      <!-- ここに自分の動画URLを入れる -->
+        <source src="_users_882e01cf-3e3e-45b9-bd54-5bbebe6c305e_generated_0d5bb1e7-1397-47d8-b0d3-bfef851ed719_generated_video.mp4" type="video/mp4">
+    </video>
+
+    <!-- 長押し中に出るオーバーレイ文字 -->
+    <div id="overlay" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-all duration-300">
+      <p class="text-white text-2xl font-bold tracking-widest">溶け合ってる♡</p>
+    </div>
+  </div>
+
+  <p class="text-purple-700 font-medium">長押しでぐるぐる融合...</p>
+</body>
+
+<script>
+  const area = document.getElementById('mix-area');
+  const video = document.getElementById('fusion-video');
+  const overlay = document.getElementById('overlay');
+  let pressTimer;
+
+  // 長押し開始
+  function startPress() {
+    pressTimer = setTimeout(() => {
+      video.playbackRate = 0.5;   // 0.5倍速
+      video.muted = true;
+      video.loop = true;
+      video.play();
+      overlay.classList.remove('opacity-0');
+      overlay.classList.add('opacity-100');
+    }, 300); // 0.3秒以上押したら開始
+  }
+
+  // 長押し解除
+  function endPress() {
+    clearTimeout(pressTimer);
+    video.pause();
+    overlay.classList.add('opacity-0');
+    overlay.classList.remove('opacity-100');
+  }
+
+  // イベント設定
+  area.addEventListener('mousedown', startPress);
+  area.addEventListener('mouseup', endPress);
+  area.addEventListener('mouseleave', endPress);
+
+  // スマホ対応
+  area.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    startPress();
+  });
+  area.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    endPress();
+  });
+</script>
+</html>
