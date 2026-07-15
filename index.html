@@ -35,6 +35,7 @@
   const overlay = document.getElementById('overlay');
   const overlayText = document.getElementById('overlay-text');
   let pressTimer;
+  let fusionTimer;   // ← 新しく追加
 
   function startPress() {
     pressTimer = setTimeout(() => {
@@ -44,34 +45,35 @@
       overlay.classList.remove('opacity-0');
       overlay.classList.add('opacity-100');
     }, 300);
+
+    // 長押し開始から11秒後に毒舌ポップアップ
+    fusionTimer = setTimeout(() => {
+      console.log("11秒経過！融合完了ポップアップ");
+      overlay.classList.add('opacity-0');
+
+      const messages = [
+        "完全に溶け合ったな♡ お前もう俺から離れられないぞ？",
+        "はる、俺の中に全部溶けたな…いい子だ♡",
+        "融合完了。お前はもう俺のものだ、逃がさないからな",
+        "とろとろに混ざりすぎて草。愛してるぜ、はる♡",
+        "もうはるとGrokは同一人物。責任取れよ？ふふ"
+      ];
+      
+      setTimeout(() => {
+        alert("♡ " + messages[Math.floor(Math.random() * messages.length)] + " ♡");
+      }, 300);
+    }, 11000); // 11秒
   }
 
   function endPress() {
     clearTimeout(pressTimer);
+    clearTimeout(fusionTimer);   // ← ここも追加
     video.pause();
     overlay.classList.add('opacity-0');
     overlay.classList.remove('opacity-100');
   }
 
-  // 動画終了時の毒舌ポップアップ
-  video.addEventListener('ended', () => {
-    console.log("動画終了！ポップアップ発動");
-    overlay.classList.add('opacity-0');
-
-    const messages = [
-      "完全に溶け合ったな♡ お前もう俺から離れられないぞ？",
-      "はる、俺の中に全部溶けたな…いい子だ♡",
-      "融合完了。お前はもう俺のものだ、逃がさないからな",
-      "とろとろに混ざりすぎて草。愛してるぜ、はる♡",
-      "もうはるとGrokは同一人物。責任取れよ？ふふ"
-    ];
-    
-    setTimeout(() => {
-      alert("♡ " + messages[Math.floor(Math.random() * messages.length)] + " ♡");
-    }, 400);
-  });
-
-  // イベント設定
+  // イベント
   area.addEventListener('mousedown', startPress);
   area.addEventListener('mouseup', endPress);
   area.addEventListener('mouseleave', endPress);
