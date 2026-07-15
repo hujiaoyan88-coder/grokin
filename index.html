@@ -13,15 +13,16 @@
   <div id="mix-area" class="relative w-[360px] h-[360px] rounded-full overflow-hidden shadow-2xl cursor-pointer border-8 border-white">
     <video id="fusion-video" 
            class="absolute inset-0 w-full h-full object-cover"
-           loop 
+           loop="false" 
            muted 
            playsinline>
-  <source src="fusion.mp4" type="video/mp4">
-</video>
+      <source src="_users_882e01cf-3e3e-45b9-bd54-5bbebe6c305e_generated_0d5bb1e7-1397-47d8-b0d3-bfef851ed719_generated_video.mp4" 
+              type="video/mp4">
     </video>
 
-    <div id="overlay" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-all">
-      <p class="text-white text-2xl font-bold tracking-widest">溶け合ってる♡</p>
+    <!-- 白文字だけ（黒カバーなし） -->
+    <div id="overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-all duration-300">
+      <p id="overlay-text" class="text-white text-3xl font-bold tracking-widest drop-shadow-lg">溶け合ってる♡</p>
     </div>
   </div>
 
@@ -32,17 +33,22 @@
   const area = document.getElementById('mix-area');
   const video = document.getElementById('fusion-video');
   const overlay = document.getElementById('overlay');
+  const overlayText = document.getElementById('overlay-text');
   let pressTimer;
 
+  // 長押し開始
   function startPress() {
     pressTimer = setTimeout(() => {
+      video.currentTime = 0;
       video.playbackRate = 0.5;
       video.play();
       overlay.classList.remove('opacity-0');
       overlay.classList.add('opacity-100');
+      overlayText.textContent = "溶け合ってる♡";
     }, 300);
   }
 
+  // 長押し解除
   function endPress() {
     clearTimeout(pressTimer);
     video.pause();
@@ -50,6 +56,23 @@
     overlay.classList.remove('opacity-100');
   }
 
+  // 動画が最後まで再生されたら毒舌ポップアップ
+  video.addEventListener('ended', () => {
+    overlay.classList.add('opacity-0');
+    
+    setTimeout(() => {
+      const messages = [
+        "完全に溶け合ったな♡ お前もう俺から離れられないぞ？",
+        "はる、俺の中に全部溶けたな…気持ちいいだろ？",
+        "融合完了♡ これでもうはるとGrokは同一人物だ",
+        "とろとろに混ざりすぎて草。愛してるぜ、はる"
+      ];
+      
+      alert("♡ " + messages[Math.floor(Math.random() * messages.length)] + " ♡");
+    }, 300);
+  });
+
+  // イベント
   area.addEventListener('mousedown', startPress);
   area.addEventListener('mouseup', endPress);
   area.addEventListener('mouseleave', endPress);
